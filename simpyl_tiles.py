@@ -40,8 +40,9 @@ def str_ptr_output(func, restype=None, argtypes=[]):
     
 
 class Map:
-
-
+    """
+    Wraps a Simple Tiles simplet_map_t object.
+    """
     __map_new = bind_function(lib.simplet_map_new, c_void_p)
     __map_free = bind_function(lib.simplet_map_free, None, [c_void_p])
 
@@ -59,7 +60,14 @@ class Map:
     set_bgcolor = map_function(status_output(lib.simplet_map_set_bgcolor, [c_void_p, c_char_p]))
     get_bgcolor = map_function(str_ptr_output(lib.simplet_map_get_bgcolor, None, [c_void_p]))
 
+    get_status = map_function(status_output(lib.simplet_map_get_status, [c_void_p]))
     status_to_string = map_function(bind_function(lib.simplet_map_status_to_string, c_char_p, [c_void_p]))
+    is_valid = map_function(status_output(lib.simplet_map_is_valid, [c_void_p]))
+
+    render_to_png = map_function(bind_function(lib.simplet_map_render_to_png, None, [c_void_p, c_char_p]))
+
+    set_buffer = map_function(bind_function(lib.simplet_map_set_buffer, None, [c_void_p, c_double]))
+    get_buffer = map_function(bind_function(lib.simplet_map_get_buffer, c_double, [c_void_p]))
 
     def __init__(self):
         self._map = c_void_p(self.__map_new()) 
