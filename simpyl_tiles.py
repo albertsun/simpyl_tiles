@@ -60,18 +60,18 @@ class Map:
     set_bgcolor = simplet_class_method(status_output(lib.simplet_map_set_bgcolor, [c_void_p, c_char_p]))
     get_bgcolor = simplet_class_method(str_ptr_output(lib.simplet_map_get_bgcolor, None, [c_void_p]))
 
-   __add_layer = simplet_class_method(bind_function(lib.simplet_map_add_layer, c_void_p, [c_void_p, c_char_p]))
-   def add_layer(self, datastring):
-       lyr_ptr = c_void_p(self.__add_layer(self, datastring))
-       lyr = Layer(ptr=lyr_ptr)
-       self.layers.append(lyr)
-       return lyr
+    __add_layer = simplet_class_method(bind_function(lib.simplet_map_add_layer, c_void_p, [c_void_p, c_char_p]))
+    def add_layer(self, datastring):
+        lyr_ptr = c_void_p(self.__add_layer(datastring))
+        lyr = Layer(ptr=lyr_ptr)
+        self.layers.append(lyr)
+        return lyr
 
-   __add_layer_directly = simplet_class_method(bind_function(lib.simplet_map_add_layer_directly, c_void_p, [c_void_p, c_void_p]))
-   def add_layer_directly(self, layer):
-       lyr_ptr = c_void_p(self.__add_layer_directly(self, layer._simplet_ptr))
-       self.layers.append(layer)
-       return layer
+    __add_layer_directly = simplet_class_method(bind_function(lib.simplet_map_add_layer_directly, c_void_p, [c_void_p, c_void_p]))
+    def add_layer_directly(self, layer):
+        lyr_ptr = c_void_p(self.__add_layer_directly(layer._simplet_ptr))
+        self.layers.append(layer)
+        return layer
 
     get_status = simplet_class_method(status_output(lib.simplet_map_get_status, [c_void_p]))
     status_to_string = simplet_class_method(bind_function(lib.simplet_map_status_to_string, c_char_p, [c_void_p]))
@@ -110,18 +110,18 @@ class Layer:
     set_source = simplet_class_method(bind_function(lib.simplet_layer_set_source, None, [c_void_p,c_char_p]))
     get_source = simplet_class_method(str_ptr_output(lib.simplet_layer_get_source, None, [c_void_p]))
 
-   __add_query = simplet_class_method(bind_function(lib.simplet_layer_add_query, c_void_p, [c_void_p, c_char_p]))
-   def add_query(self, ogrsql):
-       query_ptr = c_void_p(self.__add_query(self, ogrsql))
-       query = Query(ptr=query_ptr)
-       self.queries.append(query)
-       return query
+    __add_query = simplet_class_method(bind_function(lib.simplet_layer_add_query, c_void_p, [c_void_p, c_char_p]))
+    def add_query(self, ogrsql):
+        query_ptr = c_void_p(self.__add_query(ogrsql))
+        query = Query(ptr=query_ptr)
+        self.queries.append(query)
+        return query
 
-   __add_query_directly = simplet_class_method(bind_function(lib.simplet_layer_add_query_directly, c_void_p, [c_void_p, c_void_p]))
-   def add_query_directly(self, query):
-       query_ptr = c_void_p(self.__add_query_directly(self, query._simplet_ptr))
-       self.queries.append(query)
-       return query
+    __add_query_directly = simplet_class_method(bind_function(lib.simplet_layer_add_query_directly, c_void_p, [c_void_p, c_void_p]))
+    def add_query_directly(self, query):
+        query_ptr = c_void_p(self.__add_query_directly(query._simplet_ptr))
+        self.queries.append(query)
+        return query
 
     def __init__(self, *args, **kwargs):
         if kwargs.has_key("ptr"):
@@ -144,7 +144,7 @@ class Query:
 
     __add_style = simplet_class_method(bind_function(lib.simplet_query_add_style, c_void_p, [c_void_p, c_char_p, c_char_p]))
     def add_style(self, key, arg):
-        style_ptr = c_void_p(self.__add_style(self, key, arg))
+        style_ptr = c_void_p(self.__add_style(key, arg))
         style = Style(ptr=style_ptr)
         self.styles.append(style)
         return style
@@ -154,6 +154,8 @@ class Query:
             self._simplet_ptr = kwargs.get("ptr")
         elif kwargs.has_key("sqlquery"):
             self._simplet_ptr = c_void_p(self.__query_new(kwargs.get("sqlquery")))
+
+        self.styles = []
 
     def __del__(self):
         self.__query_free(self._simplet_ptr)
