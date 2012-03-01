@@ -86,8 +86,8 @@ class Map:
         self._simplet_ptr = c_void_p(self.__map_new()) 
         self.layers = []
 
-    def __del__(self):
-        self.__map_free(self._simplet_ptr)
+#    def __del__(self):
+#        self.__map_free(self._simplet_ptr)
 
 class Bounds:
 
@@ -99,8 +99,8 @@ class Bounds:
     def __init__(self):
         self._simplet_ptr = c_void_p(self.__bounds_new())
 
-    def __del__(self):
-        self.__bounds_new(self._simplet_ptr)
+#    def __del__(self):
+#        self.__bounds_new(self._simplet_ptr)
 
 class Layer:
     
@@ -131,8 +131,8 @@ class Layer:
 
         self.queries = []
 
-    def __del__(self):
-        self.__layer_free(self._simplet_ptr)
+#    def __del__(self):
+#        self.__layer_free(self._simplet_ptr)
 
 class Query:
 
@@ -157,8 +157,8 @@ class Query:
 
         self.styles = []
 
-    def __del__(self):
-        self.__query_free(self._simplet_ptr)
+#    def __del__(self):
+#        self.__query_free(self._simplet_ptr)
 
 class Style:
 
@@ -176,6 +176,6 @@ class Style:
         elif kwargs.has_key("key") and kwargs.has_key("arg"):
             self._simplet_ptr = c_void_p(self.__style_new(kwargs.get("key"), kwargs.get("arg")))
 
-    def __del__(self):
-        self.__query_free(self._simplet_ptr)
+#    def __del__(self):
+#        self.__query_free(self._simplet_ptr)
 
